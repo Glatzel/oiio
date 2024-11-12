@@ -36,7 +36,7 @@ jobs:
         run: |
           try{$current_versions=gh release view -R Glatzel/oiio --json tagName -q .tagName}
           catch{$LASTEXITCODE=0}
-          
+
           write-output $current_versions
 
           if("$current_versions".Contains("${{steps.get-version.outputs.version}}")){
