@@ -1,0 +1,8 @@
+{
+  "dependencies": [
+    "openimageio",
+    "yaml-cpp",
+    "zlib"
+  ],
+  "name": "ocio-ext"
+}
