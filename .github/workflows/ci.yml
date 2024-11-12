@@ -1,4 +1,4 @@
-name: Release
+name: CI
 
 permissions:
   contents: write
@@ -35,9 +35,10 @@ jobs:
         id: check-new-version
         run: |
           $current_versions=gh release view -R Glatzel/oiio --json tagName -q .tagName
+
           write-output $current_versions
 
-          if("$current_versions".Contains("${{steps.get-version.outputs.version}}")){
+          if("$current_versions".Contains("${{ steps.get-version.outputs.version }}")){
             echo "need_build=false" >> "$env:GITHUB_OUTPUT"
             write-output "No new version found, skip build."
           }
@@ -45,8 +46,9 @@ jobs:
             echo "need_build=true" >> "$env:GITHUB_OUTPUT"
             write-output "New version found, ${{steps.get-version.outputs.version}}"
           }
+        continue-on-error: true
 
-  release:
+  build-release:
     # run this job when new version is found or push or pull_request
     # only create release on schedule or workflow_dispatch
     needs: version-check
@@ -77,7 +79,7 @@ jobs:
         run: Compress-Archive -Path ./openimageio -DestinationPath ./openimageio-windows-${{needs.version-check.outputs.version}}.zip -PassThru
 
       - name: Release
-        if: ${{ github.event_name=='workflow_dispatch'||github.event_name=='schedule'  }}
+        if: ${{ github.event_name=='workflow_dispatch'||github.event_name=='schedule' }}
         uses: softprops/action-gh-release@v2
         with:
           files: openimageio-windows-${{needs.version-check.outputs.version}}.zip
