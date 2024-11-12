@@ -12,7 +12,7 @@ on:
     - cron: "0 0 * * *"
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 
 jobs:
@@ -75,12 +75,36 @@ jobs:
       - name: copy item
         run: ./scripts/copy-item.ps1
 
-      - name: pack
+      - name: build info
+        run: |
+          '| Dependency     | Version   |'> build_info.md
+          '|----------------|-----------|'>> build_info.md
+
+          $content = ./openimageio/oiiotool.exe --help | Select-String "Dependencies: "
+          $content = "$content" -replace "Dependencies:", ""
+          $content = "$content" -replace ", ", "|`n|"
+          $content = "$content" -replace " ", "|"
+          $content = "$content" + '|'
+          $content >> build_info.md
+
+      - name: Job Sammary
+        run: |
+          "## OpenImageIO ${{needs.version-check.outputs.version}}" >> $env:GITHUB_STEP_SUMMARY
+          Get-Content -Path ./build_info.md >> $env:GITHUB_STEP_SUMMARY
+
+      - name: Pack
         run: Compress-Archive -Path ./openimageio -DestinationPath ./openimageio-windows-${{needs.version-check.outputs.version}}.zip -PassThru
 
-      - name: Release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: openimageio-windows-${{needs.version-check.outputs.version}}
+          path: openimageio-windows-${{needs.version-check.outputs.version}}.zip
+          if-no-files-found: error
+
+      - name: Create Release
         if: ${{ github.event_name=='workflow_dispatch'||github.event_name=='schedule' }}
         uses: softprops/action-gh-release@v2
         with:
+          body_path: build_info.md
           files: openimageio-windows-${{needs.version-check.outputs.version}}.zip
           tag_name: ${{needs.version-check.outputs.version}}
