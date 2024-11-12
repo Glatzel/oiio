@@ -80,7 +80,7 @@ jobs:
           '| Dependency     | Version   |'> build_info.md
           '|----------------|-----------|'>> build_info.md
 
-          $content = ./opencolorio/oiiotool.exe --help | Select-String "Dependencies: "
+          $content = ./openimage/oiiotool.exe --help | Select-String "Dependencies: "
           $content = "$content" -replace "Dependencies:", ""
           $content = "$content" -replace ", ", "|`n|"
           $content = "$content" -replace " ", "|"
