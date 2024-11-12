@@ -95,6 +95,12 @@ jobs:
       - name: pack
         run: Compress-Archive -Path ./openimageio -DestinationPath ./openimageio-windows-${{needs.version-check.outputs.version}}.zip -PassThru
 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: openimageio-windows-${{needs.version-check.outputs.version}}
+          path: openimageio-windows-${{needs.version-check.outputs.version}}.zip
+          if-no-files-found: error
+
       - name: Release
         if: ${{ github.event_name=='workflow_dispatch'||github.event_name=='schedule' }}
         uses: softprops/action-gh-release@v2
