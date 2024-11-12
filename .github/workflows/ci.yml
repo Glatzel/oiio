@@ -38,7 +38,7 @@ jobs:
 
           write-output $current_versions
 
-          if("$current_versions".Contains("${{steps.get-version.outputs.version}}")){
+          if("$current_versions".Contains("${{ steps.get-version.outputs.version }}")){
             echo "need_build=false" >> "$env:GITHUB_OUTPUT"
             write-output "No new version found, skip build."
           }
