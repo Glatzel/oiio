@@ -34,9 +34,8 @@ jobs:
       - name: check-new-version
         id: check-new-version
         run: |
-          try{$current_versions=gh release view -R Glatzel/oiio --json tagName -q .tagName}
-          catch{$LASTEXITCODE=0}
-          
+          $current_versions=gh release view -R Glatzel/oiio --json tagName -q .tagName
+
           write-output $current_versions
 
           if("$current_versions".Contains("${{steps.get-version.outputs.version}}")){
@@ -47,7 +46,7 @@ jobs:
             echo "need_build=true" >> "$env:GITHUB_OUTPUT"
             write-output "New version found, ${{steps.get-version.outputs.version}}"
           }
-          exit $LASTEXITCODE
+        continue-on-error: true
 
   release:
     # run this job when new version is found or push or pull_request
