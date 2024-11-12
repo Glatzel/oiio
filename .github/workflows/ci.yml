@@ -46,7 +46,6 @@ jobs:
             echo "need_build=true" >> "$env:GITHUB_OUTPUT"
             write-output "New version found, ${{steps.get-version.outputs.version}}"
           }
-        continue-on-error: true
 
   build-release:
     # run this job when new version is found or push or pull_request
