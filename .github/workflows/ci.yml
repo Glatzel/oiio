@@ -89,6 +89,7 @@ jobs:
 
       - name: job sammary
         run: |
+          "## OpenColorIO ${{needs.version-check.outputs.version}}" >> $env:GITHUB_STEP_SUMMARY
           Get-Content -Path ./build_info.md >> $env:GITHUB_STEP_SUMMARY
 
       - name: pack
