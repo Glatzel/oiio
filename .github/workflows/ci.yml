@@ -27,7 +27,7 @@ jobs:
           '| Dependency     | Version   |'> build_info.md
           '|----------------|-----------|'>> build_info.md
 
-          $content = Get-Content -Path ./a.md | Select-String "Dependencies: "
+          $content = Get-Content -Path ./a.txt | Select-String "Dependencies: "
           $content = "$content" -replace "Dependencies:", ""
           $content = "$content" -replace ", ", "|`n|"
           $content = "$content" -replace " ", "|"
