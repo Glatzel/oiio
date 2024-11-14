@@ -6,7 +6,6 @@ $pkg = Resolve-Path ./oiio_dep/vcpkg_installed/x64-windows
 Write-Output "::group::Make oiio"
 Set-Location ./external/OpenImageIO
 # use vckpg findXXX.cmake
-Remove-Item ./src/cmake/modules/FindFFmpeg.cmake -ErrorAction SilentlyContinue
 Remove-Item ./src/cmake/modules/Findlibheif.cmake -ErrorAction SilentlyContinue
 Remove-Item ./src/cmake/modules/FindLibRaw.cmake -ErrorAction SilentlyContinue
 Remove-Item ./src/cmake/modules/FindTBB.cmake -ErrorAction SilentlyContinue
