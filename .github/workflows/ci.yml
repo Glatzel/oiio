@@ -40,7 +40,7 @@ jobs:
       - name: check-new-version
         id: check-new-version
         run: |
-          $current_versions=gh release view -R Glatzel/oiio --json tagName -q .tagName
+          $current_versions=gh release list -R Glatzel/oiio --json tagName
 
           write-output $current_versions
 
