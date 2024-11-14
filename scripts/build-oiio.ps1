@@ -2,7 +2,7 @@ Set-Location $PSScriptRoot
 Set-Location ..
 
 $pkg = Resolve-Path ./oiio_dep/vcpkg_installed/x64-windows
-$pkg="$pkg" -replace "\\","/"
+$pkg = "$pkg" -replace "\\", "/"
 
 Write-Output "::group::Make oiio"
 Set-Location ./external/OpenImageIO
