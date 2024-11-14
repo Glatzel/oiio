@@ -3,11 +3,9 @@ Set-Location ..
 
 $pkg = Resolve-Path ./oiio_dep/vcpkg_installed/x64-windows
 $pkg="$pkg" -replace "\\","/"
-$patch_libraw= Resolve-Path ./patch/fix_libraw.patch
+
 Write-Output "::group::Make oiio"
 Set-Location ./external/OpenImageIO
-# apply patch
-git apply $patch_libraw
 # remove makecache
 Remove-Item */CMakeCache.txt -ErrorAction SilentlyContinue
 # make
