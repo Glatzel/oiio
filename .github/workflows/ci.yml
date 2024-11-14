@@ -57,7 +57,7 @@ jobs:
     # run this job when new version is found or push or pull_request
     # only create release on schedule or workflow_dispatch
     needs: version-check
-    if: ${{needs.version-check.outputs.need_build =='true'|| github.event_name=='push'||github.event_name=='pull_request' }}
+    if: ${{needs.version-check.outputs.need_build =='true'|| github.event_name!='schedule'}}
     runs-on: windows-latest
     env:
       GH_TOKEN: ${{ github.token }}
