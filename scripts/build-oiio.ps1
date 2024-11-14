@@ -5,7 +5,14 @@ $pkg = Resolve-Path ./oiio_dep/vcpkg_installed/x64-windows
 
 Write-Output "::group::Make oiio"
 Set-Location ./external/OpenImageIO
+# use vckpg findXXX.cmake
+Remove-Item ./src/cmake/modules/FindFFmpeg.cmake -ErrorAction SilentlyContinue
+Remove-Item ./src/cmake/modules/Findlibheif.cmake -ErrorAction SilentlyContinue
+Remove-Item ./src/cmake/modules/FindLibRaw.cmake -ErrorAction SilentlyContinue
+Remove-Item ./src/cmake/modules/FindTBB.cmake -ErrorAction SilentlyContinue
+# remove makecache
 Remove-Item */CMakeCache.txt -ErrorAction SilentlyContinue
+# make
 cmake -S . -B build -DVERBOSE=ON -DCMAKE_BUILD_TYPE=Release `
   -DCMAKE_CXX_FLAGS="/utf-8" -DCMAKE_C_FLAGS="/utf-8" `
   -DBZip2_ROOT="$pkg" `
@@ -17,6 +24,7 @@ cmake -S . -B build -DVERBOSE=ON -DCMAKE_BUILD_TYPE=Release `
   -DJXL_ROOT="$pkg" `
   -DLibheif_ROOT="$pkg" `
   -Dlibjpeg-turbo_ROOT="$pkg" `
+  -DLibRaw_ROOT="$pkg" `
   -DOpenColorIO_ROOT="$pkg" `
   -DOpenEXR_ROOT="$pkg" `
   -DOpenJPEG_ROOT="$pkg" `
@@ -27,7 +35,6 @@ cmake -S . -B build -DVERBOSE=ON -DCMAKE_BUILD_TYPE=Release `
   -DWebP_ROOT="$pkg" `
   -DZLIB_ROOT="$pkg" `
   -DENABLE_DCMTK=0 `
-  -DENABLE_LibRaw=0  `
   -DENABLE_Nuke=0 `
   -DENABLE_OpenCV=0 `
   -DENABLE_OpenVDB=0 `
