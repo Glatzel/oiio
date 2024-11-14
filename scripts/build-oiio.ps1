@@ -2,11 +2,12 @@ Set-Location $PSScriptRoot
 Set-Location ..
 
 $pkg = Resolve-Path ./oiio_dep/vcpkg_installed/x64-windows
-
+$pkg="$pkg" -replace "\\","/"
+$patch= Resolve-Path ./patch/fix_libraw.patch
 Write-Output "::group::Make oiio"
 Set-Location ./external/OpenImageIO
-# use vckpg findXXX.cmake
-# Remove-Item ./src/cmake/modules/FindLibRaw.cmake -ErrorAction SilentlyContinue
+# apply patch
+git apply $patch
 # remove makecache
 Remove-Item */CMakeCache.txt -ErrorAction SilentlyContinue
 # make
@@ -37,7 +38,7 @@ cmake -S . -B build -DVERBOSE=ON -DCMAKE_BUILD_TYPE=Release `
   -DENABLE_OpenVDB=0 `
   -DENABLE_Ptex=0 `
   -DENABLE_Python3=0 `
-  -DUSE_PYTHON=0 -DUSE_QT=0 -DBUILD_SHARED_LIBS=1 -DLINKSTATIC=0 -DOIIO_BUILD_TESTS=0
+  -DUSE_PYTHON=0 -DUSE_QT=0 -DBUILD_SHARED_LIBS=0 -DLINKSTATIC=0 -DOIIO_BUILD_TESTS=0
 Write-Output "::endgroup::"
 
 Write-Output "::group::build oiio"
