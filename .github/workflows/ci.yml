@@ -80,6 +80,9 @@ jobs:
       - name: copy item
         run: ./scripts/copy-item.ps1
 
+      - name: oiiotool info
+        run: ./openimageio/oiiotool.exe --help
+
       - name: build info
         run: |
           '| Dependency     | Version   |'> build_info.md
