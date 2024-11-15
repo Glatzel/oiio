@@ -43,7 +43,8 @@ cmake -S . -B build -DVERBOSE=ON -DCMAKE_BUILD_TYPE=Release `
   -DUSE_QT=0 `
   -DBUILD_SHARED_LIBS=1 `
   -DLINKSTATIC=0 `
-  -DOIIO_BUILD_TESTS=0
+  -DOIIO_BUILD_TESTS=0 `
+  -DUSE_SIMD="sse4.2,avx2"
 Write-Output "::endgroup::"
 
 Write-Output "::group::build oiio"
