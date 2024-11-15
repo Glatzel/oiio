@@ -28,7 +28,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
     outputs:
       version: ${{steps.get-version.outputs.version}}
-      need_build: ${{steps.check-new-version.outputs.need_build}}
+      has_new_version: ${{steps.check-new-version.outputs.has_new_version}}
     steps:
       - name: get-version
         id: get-version
@@ -45,19 +45,16 @@ jobs:
           write-output $current_versions
 
           if("$current_versions".Contains("${{ steps.get-version.outputs.version }}")){
-            echo "need_build=false" >> "$env:GITHUB_OUTPUT"
+            echo "has_new_version=false" >> "$env:GITHUB_OUTPUT"
             write-output "No new version found, skip build."
           }
           else{
-            echo "need_build=true" >> "$env:GITHUB_OUTPUT"
+            echo "has_new_version=true" >> "$env:GITHUB_OUTPUT"
             write-output "New version found, ${{steps.get-version.outputs.version}}"
           }
 
   build-release:
-    # run this job when new version is found or push or pull_request
-    # only create release on schedule or workflow_dispatch
     needs: version-check
-    if: ${{needs.version-check.outputs.need_build =='true'|| github.event_name!='schedule'}}
     runs-on: windows-latest
     env:
       GH_TOKEN: ${{ github.token }}
@@ -110,7 +107,7 @@ jobs:
           if-no-files-found: error
 
       - name: Create Release
-        if: ${{ github.event_name=='workflow_dispatch'||github.event_name=='schedule' }}
+        if: ${{ github.event_name=='workflow_dispatch'|| ( github.event_name=='schedule' && needs.version-check.outputs.has_new_version =='true' )}}
         uses: softprops/action-gh-release@v2
         with:
           body_path: build_info.md
