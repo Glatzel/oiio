@@ -1,4 +1,8 @@
-param($version = gh release view -R AcademySoftwareFoundation/OpenImageIO --json tagName -q .tagName)
+param($version = "")
+if($version -eq '')
+{
+    $version=gh release view -R AcademySoftwareFoundation/OpenImageIO --json tagName -q .tagName
+}
 Set-Location $PSScriptRoot
 Set-Location ..
 $patch_libraw = Resolve-Path ./patch/fix_libraw.patch
