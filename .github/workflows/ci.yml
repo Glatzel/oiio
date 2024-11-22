@@ -66,7 +66,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: clone ocio and oiio
-        run: ./scripts/clone-repo.ps1 "${{needs.version-check.outputs.version}}"
+        run: ./scripts/clone-repo.ps1
 
       - name: install vcpkg
         run: ./scripts/install-vcpkg-dep.ps1
