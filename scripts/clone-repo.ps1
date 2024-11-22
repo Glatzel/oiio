@@ -1,4 +1,3 @@
-param($version = "v3.0.0.3")
 Set-Location $PSScriptRoot
 Set-Location ..
 $patch_libraw = Resolve-Path ./patch/fix_libraw.patch
@@ -8,6 +7,7 @@ New-Item external -ItemType Directory
 Set-Location external
 
 Write-Output "::group::clone OpenImageIO"
+$version = gh release view -R AcademySoftwareFoundation/OpenImageIO --json tagName -q .tagName
 git clone https://github.com/AcademySoftwareFoundation/OpenImageIO.git
 Set-Location OpenImageIO
 git checkout tags/"$version" -b "$version-branch"
