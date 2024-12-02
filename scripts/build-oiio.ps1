@@ -37,7 +37,7 @@ cmake -S . -B build -DVERBOSE=ON -DCMAKE_BUILD_TYPE=Release `
   -DLibRaw_ROOT="$conda_pkg" `
   -DLINKSTATIC=0 `
   -DOIIO_BUILD_TESTS=0 `
-  -DOpenColorIO_ROOT="$conda_pkg" `
+  -DOpenColorIO_ROOT="$vcpkg" `
   -DOpenEXR_ROOT="$conda_pkg" `
   -DOpenJPEG_ROOT="$conda_pkg" `
   -DPNG_ROOT="$conda_pkg" `
