@@ -98,7 +98,7 @@ jobs:
 
       - name: oiiotool info
         run: ./openimageio/oiiotool.exe --help
-  
+
       - name: build info
         run: |
           '| Dependency     | Version   |'> build_info.md
@@ -110,7 +110,7 @@ jobs:
           $content = "$content" -replace " ", "|"
           $content = "$content" + '|'
           $content >> build_info.md
-  
+
       - name: Job Sammary
         run: |
           "## OpenImageIO ${{needs.version-check.outputs.version}}" >> $env:GITHUB_STEP_SUMMARY
