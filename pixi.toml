@@ -12,6 +12,7 @@ yaml-cpp="*"
 zlib="*"
 
 [feature.oiio.dependencies]
+bzip2="*"
 ffmpeg="*"
 fmt="*"
 freetype="*"
@@ -25,7 +26,7 @@ libtiff="*"
 libwebp="*"
 openexr="*"
 openjpeg="*"
-tbb="*"
+tbb-devel="*"
 yaml-cpp="*"
 zlib="*"
 

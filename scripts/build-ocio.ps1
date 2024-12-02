@@ -2,7 +2,7 @@ Set-Location $PSScriptRoot
 Set-Location ..
 $vcpkg = Resolve-Path ./ocio_dep/vcpkg_installed/x64-windows
 $conda_pkg=Resolve-Path ./.pixi/envs/ocio/Library
-$install_prefix=Resolve-Path ./oiio_dep/vcpkg_installed/x64-windows
+$install_prefix=Resolve-Path ./.pixi/envs/oiio/Library
 
 Set-Location ./external/OpenColorIO
 Write-Output "::group::Make ocio"

@@ -1,9 +1,6 @@
 Set-Location $PSScriptRoot
 Set-Location ..
 
-$vcpkg = Resolve-Path ./oiio_dep/vcpkg_installed/x64-windows
-$vcpkg = "$vcpkg" -replace "\\", "/"
-
 $conda_pkg=Resolve-Path ./.pixi/envs/oiio/Library
 $conda_pkg = "$conda_pkg" -replace "\\", "/"
 
@@ -15,7 +12,7 @@ Remove-Item */CMakeCache.txt -ErrorAction SilentlyContinue
 cmake -S . -B build -DVERBOSE=ON -DCMAKE_BUILD_TYPE=Release `
   -DBUILD_DOCS=0 `
   -DBUILD_SHARED_LIBS=1 `
-  -DBZip2_ROOT="$vcpkg" `
+  -DBZip2_ROOT="$conda_pkg" `
   -DCMAKE_C_FLAGS="/utf-8" `
   -DCMAKE_CXX_FLAGS="/utf-8" `
   -DENABLE_DCMTK=0 `
@@ -37,7 +34,7 @@ cmake -S . -B build -DVERBOSE=ON -DCMAKE_BUILD_TYPE=Release `
   -DLibRaw_ROOT="$conda_pkg" `
   -DLINKSTATIC=0 `
   -DOIIO_BUILD_TESTS=0 `
-  -DOpenColorIO_ROOT="$vcpkg" `
+  -DOpenColorIO_ROOT="$conda_pkg" `
   -DOpenEXR_ROOT="$conda_pkg" `
   -DOpenJPEG_ROOT="$conda_pkg" `
   -DPNG_ROOT="$conda_pkg" `
