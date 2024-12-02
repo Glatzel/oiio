@@ -39,7 +39,6 @@ cmake -S . -B build -DVERBOSE=ON -DCMAKE_BUILD_TYPE=Release `
   -DOpenJPEG_ROOT="$conda_pkg" `
   -DPNG_ROOT="$conda_pkg" `
   -DPROJECT_IS_TOP_LEVEL=1 ` # copy dependent dlls to output dir.
-  -DRobinmap_ROOT="$conda_pkg" `
   -DTBB_ROOT="$conda_pkg" `
   -DTIFF_ROOT="$conda_pkg" `
   -DUSE_PYTHON=0 `
