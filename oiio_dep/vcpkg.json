@@ -1,23 +1,6 @@
 {
   "dependencies": [
-    "bzip2",
-    "ffmpeg",
-    "fmt",
-    "freetype",
-    "giflib",
-    "libheif",
-    "libjpeg-turbo",
-    "libjxl",
-    "libpng",
-    "libraw",
-    "libwebp",
-    "openexr",
-    "openjpeg",
-    "robin-map",
-    "tbb",
-    "tiff",
-    "yaml-cpp",
-    "zlib"
+    "bzip2"
   ],
   "name": "oiio-ext"
 }

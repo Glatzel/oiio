@@ -2,3 +2,7 @@ vcpkg_installed
 external
 openimageio
 vcpkg
+
+# pixi environments
+.pixi
+*.egg-info
