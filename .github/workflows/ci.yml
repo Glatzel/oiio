@@ -65,6 +65,13 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
 
+      - name: Set up pixi
+        uses: prefix-dev/setup-pixi@v0.8.1
+        with:
+          run-install: false
+
+      - run: pixi install --all
+
       - name: clone ocio and oiio
         run: ./scripts/clone-repo.ps1 "${{needs.version-check.outputs.version}}"
 
@@ -79,6 +86,16 @@ jobs:
 
       - name: copy item
         run: ./scripts/copy-item.ps1
+        continue-on-error: true
+
+      - name: Pack
+        run: Compress-Archive -Path ./openimageio -DestinationPath ./openimageio-windows-${{needs.version-check.outputs.version}}.zip -PassThru
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: openimageio-windows-${{needs.version-check.outputs.version}}
+          path: openimageio-windows-${{needs.version-check.outputs.version}}.zip
+          if-no-files-found: error
 
       - name: oiiotool info
         run: ./openimageio/oiiotool.exe --help
@@ -99,15 +116,6 @@ jobs:
         run: |
           "## OpenImageIO ${{needs.version-check.outputs.version}}" >> $env:GITHUB_STEP_SUMMARY
           Get-Content -Path ./build_info.md >> $env:GITHUB_STEP_SUMMARY
-
-      - name: Pack
-        run: Compress-Archive -Path ./openimageio -DestinationPath ./openimageio-windows-${{needs.version-check.outputs.version}}.zip -PassThru
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: openimageio-windows-${{needs.version-check.outputs.version}}
-          path: openimageio-windows-${{needs.version-check.outputs.version}}.zip
-          if-no-files-found: error
 
       - name: Create Release
         if: ${{ github.event_name=='workflow_dispatch'||github.event_name=='schedule' }}
