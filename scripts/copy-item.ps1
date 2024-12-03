@@ -9,7 +9,6 @@ copy-Item ./.pixi/envs/oiio/Library/bin/*.dll ./openimageio
 
 new-item temp -itemtype directory -ErrorAction SilentlyContinue
 foreach ($dep in Get-ChildItem ./openimageio/*.dll) {
-    Write-Output "::group::$dep"
     $name = $dep.Name
     copy-Item $dep ./temp
     Remove-Item $dep
@@ -21,5 +20,4 @@ foreach ($dep in Get-ChildItem ./openimageio/*.dll) {
     else{
         Write-Host "It is not a dependency: $name" -ForegroundColor Red
     }
-    Write-Output "::endgroup::"
 }
