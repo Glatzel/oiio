@@ -17,6 +17,7 @@ cmake -S . -B build -DVERBOSE=ON -DCMAKE_BUILD_TYPE=Release `
   -DCMAKE_CXX_FLAGS="/utf-8" `
   -DENABLE_DCMTK=0 `
   -DENABLE_INSTALL_testtex=0 `
+  -DENABLE_libuhdr=0 `
   -DENABLE_Nuke=0 `
   -DENABLE_OpenCV=0 `
   -DENABLE_OpenVDB=0 `
