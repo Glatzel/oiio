@@ -16,6 +16,10 @@ foreach ($dep in Get-ChildItem ./openimageio/*.dll) {
     if ($LASTEXITCODE -ne 0) {
         $name = $dep.Name
         copy-Item "./temp/$name" ./openimageio
+        Write-Output "It is a dependency: $dep"
+    }
+    else{
+        Write-Output "It is not a dependency: $dep"
     }
     Write-Output "::endgroup::"
 }
