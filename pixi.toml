@@ -13,7 +13,6 @@ zlib="*"
 
 [feature.oiio.dependencies]
 bzip2="*"
-ffmpeg="*"
 fmt="*"
 freetype="*"
 giflib="*"

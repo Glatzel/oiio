@@ -16,6 +16,7 @@ cmake -S . -B build -DVERBOSE=ON -DCMAKE_BUILD_TYPE=Release `
   -DCMAKE_C_FLAGS="/utf-8" `
   -DCMAKE_CXX_FLAGS="/utf-8" `
   -DENABLE_DCMTK=0 `
+  -DENABLE_FFmpeg=0 `
   -DENABLE_INSTALL_testtex=0 `
   -DENABLE_libuhdr=0 `
   -DENABLE_Nuke=0 `
@@ -23,7 +24,6 @@ cmake -S . -B build -DVERBOSE=ON -DCMAKE_BUILD_TYPE=Release `
   -DENABLE_OpenVDB=0 `
   -DENABLE_Ptex=0 `
   -DENABLE_Python3=0 `
-  -DFFmpeg_ROOT="$conda_pkg" `
   -Dfmt_ROOT="$conda_pkg" `
   -DFreetype_ROOT="$conda_pkg" `
   -DGIF_ROOT="$conda_pkg" `
