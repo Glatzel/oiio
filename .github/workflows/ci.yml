@@ -86,6 +86,7 @@ jobs:
 
       - name: copy item
         run: ./scripts/copy-item.ps1
+        continue-on-error: true
 
       - name: Pack
         run: Compress-Archive -Path ./openimageio -DestinationPath ./openimageio-windows-${{needs.version-check.outputs.version}}.zip -PassThru
