@@ -66,7 +66,7 @@ jobs:
       - run: pixi install --all
 
       - name: clone ocio and oiio
-        run: ./scripts/clone-repo.ps1 "${{needs.version-check.outputs.version}}"
+        run: ./scripts/clone-repo.ps1 "${{steps.version-check.outputs.version}}"
 
       - name: install vcpkg
         run: ./scripts/install-vcpkg-dep.ps1
@@ -82,12 +82,12 @@ jobs:
         continue-on-error: true
 
       - name: Pack
-        run: Compress-Archive -Path ./openimageio -DestinationPath ./openimageio-windows-${{needs.version-check.outputs.version}}.zip -PassThru
+        run: Compress-Archive -Path ./openimageio -DestinationPath ./openimageio-windows-${{steps.version-check.outputs.version}}.zip -PassThru
 
       - uses: actions/upload-artifact@v4
         with:
-          name: openimageio-windows-${{needs.version-check.outputs.version}}
-          path: openimageio-windows-${{needs.version-check.outputs.version}}.zip
+          name: openimageio-windows-${{steps.version-check.outputs.version}}
+          path: openimageio-windows-${{steps.version-check.outputs.version}}.zip
           if-no-files-found: error
 
       - name: oiiotool info
@@ -107,7 +107,7 @@ jobs:
 
       - name: Job Sammary
         run: |
-          "## OpenImageIO ${{needs.version-check.outputs.version}}" >> $env:GITHUB_STEP_SUMMARY
+          "## OpenImageIO ${{steps.version-check.outputs.version}}" >> $env:GITHUB_STEP_SUMMARY
           Get-Content -Path ./build_info.md >> $env:GITHUB_STEP_SUMMARY
 
       - name: Create Release
