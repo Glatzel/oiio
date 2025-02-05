@@ -22,39 +22,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  version-check:
-    runs-on: windows-latest
-    env:
-      GH_TOKEN: ${{ github.token }}
-    outputs:
-      version: ${{steps.get-version.outputs.version}}
-      need_build: ${{steps.check-new-version.outputs.need_build}}
-    steps:
-      - name: get-version
-        id: get-version
-        run: |
-          $version=gh release view -R AcademySoftwareFoundation/OpenImageIO --json tagName -q .tagName
-          Write-Output "openimageio: $version"
-          echo "version=$version" >> "$env:GITHUB_OUTPUT"
-
-      - name: check-new-version
-        id: check-new-version
-        run: |
-          $current_versions=gh release list -R Glatzel/oiio --json tagName
-
-          write-output $current_versions
-
-          if("$current_versions".Contains("${{ steps.get-version.outputs.version }}")){
-            echo "need_build=false" >> "$env:GITHUB_OUTPUT"
-            write-output "No new version found, skip build."
-          }
-          else{
-            echo "need_build=true" >> "$env:GITHUB_OUTPUT"
-            write-output "New version found, ${{steps.get-version.outputs.version}}"
-          }
-
   build-release:
-    needs: version-check
     if: ${{ github.event_name!='schedule'}}
     runs-on: windows-latest
     env:
@@ -63,12 +31,32 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
       
-      - name: Cache Primes
-        id: cache-primes
+      - name: Cache vcpkg
+        id: cache-vcpkg
         uses: actions/cache@v4
         with:
           path: ./ocio_dep/vcpkg_installed
           key: vcpkg-${{ hashFiles('./ocio_dep/vcpkg.json') }}
+
+      - name: version-check
+        id: version-check
+        run: |
+          $version=gh release view -R AcademySoftwareFoundation/OpenImageIO --json tagName -q .tagName
+          echo "version=$version" >> "$env:GITHUB_OUTPUT"
+          Write-Output "openimageio src: $version"
+
+          $current_versions=gh release list -R Glatzel/oiio --json tagName
+
+          write-output $current_versions
+
+          if("$current_versions".Contains("$version")){
+            echo "new_version=false" >> "$env:GITHUB_OUTPUT"
+            write-output "No new version found, skip build."
+          }
+          else{
+            echo "new_version=true" >> "$env:GITHUB_OUTPUT"
+            write-output "New version found, $version"
+          }
 
       - name: Set up pixi
         uses: prefix-dev/setup-pixi@v0.8.1
@@ -123,9 +111,9 @@ jobs:
           Get-Content -Path ./build_info.md >> $env:GITHUB_STEP_SUMMARY
 
       - name: Create Release
-        if: ${{ github.event_name=='workflow_dispatch'||(github.event_name=='schedule' && needs.version-check.outputs.need_build =='true') }}
+        if: ${{ github.event_name=='workflow_dispatch'||(github.event_name=='schedule' && steps.version-check.outputs.new_version =='true') }}
         uses: softprops/action-gh-release@v2
         with:
           body_path: build_info.md
-          files: openimageio-windows-${{needs.version-check.outputs.version}}.zip
-          tag_name: ${{needs.version-check.outputs.version}}
+          files: openimageio-windows-${{steps.version-check.outputs.version}}.zip
+          tag_name: ${{steps.version-check.outputs.version}}
