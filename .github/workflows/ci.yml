@@ -59,7 +59,7 @@ jobs:
 
       - name: clone ocio and oiio
         run: ./scripts/clone-repo.ps1 "${{steps.version-check.outputs.version}}"
-      
+
       # always restore cache
       # run install vcpkg when event is not pr or no cache found
       # save cache if not found
