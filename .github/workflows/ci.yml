@@ -49,14 +49,6 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
 
-      - name: restore vcpkg
-        if: ${{ github.event_name == 'pull_request'}}
-        id: cache-vcpkg
-        uses: actions/cache/restore@v4
-        with:
-          path: ./ocio_dep/vcpkg_installed
-          key: vcpkg-${{ hashFiles('./ocio_dep/vcpkg.json') }}
-
       - name: version-check
         id: version-check
         run: |
@@ -87,7 +79,16 @@ jobs:
       - name: clone ocio and oiio
         run: ./scripts/clone-repo.ps1 "${{steps.version-check.outputs.version}}"
 
-      - name: install vcpkg
+      - name: restore vcpkg
+        if: ${{ github.event_name == 'pull_request'}}
+        id: cache-vcpkg
+        uses: actions/cache/restore@v4
+        with:
+          path: ./ocio_dep/vcpkg_installed
+          key: vcpkg-${{ hashFiles('./ocio_dep/vcpkg.json') }}
+
+      - name: install vcpkg dependencies
+        if: ${{ github.event_name!='pull_request'}}
         run: ./scripts/install-vcpkg-dep.ps1
 
       - name: build ocio
