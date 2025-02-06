@@ -22,26 +22,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  cache-vcpkg:
-    if: ${{ github.event_name=='pull_request'}}
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Cache vcpkg
-        id: cache-vcpkg
-        uses: actions/cache@v4
-        with:
-          path: ./ocio_dep/vcpkg_installed
-          key: vcpkg-${{ hashFiles('./ocio_dep/vcpkg.json') }}
-      
-      - name: install vcpkg dependencies
-        if: ${{steps.cache-vcpkg.outputs.cache-hit==''}}
-        run: ./scripts/install-vcpkg-dep.ps1
-        
   build-release:
-    needs: cache-vcpkg
-    if: ${{ ! failure() }}
     runs-on: windows-latest
     env:
       GH_TOKEN: ${{ github.token }}
@@ -79,16 +60,16 @@ jobs:
       - name: clone ocio and oiio
         run: ./scripts/clone-repo.ps1 "${{steps.version-check.outputs.version}}"
 
-      - name: restore vcpkg
+      - name: cache vcpkg
         if: ${{ github.event_name == 'pull_request'}}
         id: cache-vcpkg
-        uses: actions/cache/restore@v4
+        uses: actions/cache@v4
         with:
           path: ./ocio_dep/vcpkg_installed
           key: vcpkg-${{ hashFiles('./ocio_dep/vcpkg.json') }}
 
       - name: install vcpkg dependencies
-        if: ${{ github.event_name!='pull_request'}}
+        if: ${{ github.event_name!='pull_request'||steps.cache-vcpkg..outputs.cache-hit==''}}
         run: ./scripts/install-vcpkg-dep.ps1
 
       - name: build ocio
