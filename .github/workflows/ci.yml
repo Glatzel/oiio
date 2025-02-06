@@ -69,7 +69,7 @@ jobs:
           key: vcpkg-${{ hashFiles('./ocio_dep/vcpkg.json') }}
 
       - name: install vcpkg dependencies
-        if: ${{ github.event_name!='pull_request'||steps.cache-vcpkg..outputs.cache-hit==''}}
+        if: ${{ github.event_name!='pull_request'||steps.cache-vcpkg.outputs.cache-hit==''}}
         run: ./scripts/install-vcpkg-dep.ps1
 
       - name: build ocio
