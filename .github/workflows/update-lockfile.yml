@@ -12,5 +12,4 @@ jobs:
   pixi-update:
     uses: Glatzel/template/.github/workflows/update-pixi-lock.yml@main
     with:
-      no-install: true
       draft: true
